@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="/public/semantic.min.css" rel="stylesheet">
+    <link href="/public/cleditor/jquery.cleditor.css" rel="stylesheet" />
+    
+    
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="/public/semantic.min.js"></script>
+    <script src="/public/cleditor/jquery.cleditor.min.js"></script>
+    <script>
+    
+        $(document).ready(function(){
+            var output=$("#contentsOutput").text();
+            console.log('output:'+output);
+            
+            $("#contentsOutput").html(output);
+            
+            
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="ui blue fluid card">
+     <div class="content">
+         <%
+            var curTitle=posts._doc.title;
+            var curContents=posts._doc.contents;
+            var curWriter=posts._doc.writer.name;
+            
+            var entities=new Entities();
+            var decodedContents=entities.decode(curContents);
+            var created_at=posts._doc.created_at;
+            var now=new Date();
+         
+           var timeBounds=(now.getTime()-created_at.getTime())/(1000*60*60*24);
+            if(timeBounds<1){
+                timeBounds='오늘';
+            }else{
+                timeBounds+='일전';
+            }
+         
+         %> 
+         <div id="titleOutput" class="header"><%=curTitle %></div>
+         <div class="meta">
+             <span class="right floated time"><%=timeBounds%></span>
+             <span class="category">일반</span>
+         </div>
+         <div id="contentsOutput" class="description">
+             <%=decodedContents %>
+             
+         </div>
+         <div class="extra content">
+             <div class="right floated author">
+                 <img class="ui avatar image" src="/public/images/author.png"><%=curWriter %>
+                 
+             </div>
+             
+         </div>
+       </div>
+        <br><br><a class="ui button" href="/process/listpost?page=0&perPage=2">글목록</a>
+    </div>
+</body>
+</html>
